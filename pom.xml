@@ -4,9 +4,9 @@
    <modelVersion>4.0.0</modelVersion>
    <parent>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-parent</artifactId>
-      <version>3.0.5</version>
-      <relativePath/> <!-- lookup parent from repository -->
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.7.12-SNAPSHOT</version>
+		<relativePath/> <!-- lookup parent from repository -->
    </parent>
    <groupId>com.ducks.demys</groupId>
    <artifactId>demys</artifactId>
@@ -15,7 +15,7 @@
    <name>boot</name>
    <description>boot project for Spring Boot</description>
    <properties>
-      <java.version>17</java.version>
+      <java.version>1.6</java.version>
    </properties>
    <dependencies>
       <dependency>
@@ -48,7 +48,6 @@
          <dependency>
              <groupId>jakarta.servlet</groupId>
              <artifactId>jakarta.servlet-api</artifactId>
-
              <scope>provided</scope>
          </dependency>
          <!-- https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api -->
@@ -68,7 +67,7 @@
       <dependency>
           <groupId>org.mybatis.spring.boot</groupId>
           <artifactId>mybatis-spring-boot-starter</artifactId>
-          <version>3.0.1</version>
+          <version>2.3.0</version>
       </dependency>
       <!-- <dependency>
          <groupId>com.mysql</groupId>
@@ -76,12 +75,18 @@
          <scope>runtime</scope>
       </dependency>-->
 
-<!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc8 -->
+<!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc8 
 		<dependency>
 		    <groupId>com.oracle.database.jdbc</groupId>
 			<artifactId>ojdbc8</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+		</dependency>-->
+
+		<!-- https://mvnrepository.com/artifact/com.oracle.database.jdbc/ojdbc6-->
+		<dependency>
+		    <groupId>com.oracle.database.jdbc</groupId>
+		    <artifactId>ojdbc6</artifactId>
+		    <version>11.2.0.4</version>
+		</dependency> 
 
 
 
