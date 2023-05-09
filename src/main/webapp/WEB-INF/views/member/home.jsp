@@ -9,7 +9,5 @@
 </head>
 <body>
 	<h1>test!!!!</h1>
-	<div>${member.MEMBER_ID }</div>
-	<div>${member.MEMBER_NAME }</div>
 </body>
 </html>

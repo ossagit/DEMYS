@@ -20,5 +20,4 @@ spring:
     username: FINAL
     password: FINAL
 mybatis:
-  mapper-locations: classpath:/mapper/*.xml
   type-aliases-package: com.ducks.demys.boot.vo
