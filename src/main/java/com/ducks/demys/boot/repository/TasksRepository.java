@@ -11,6 +11,8 @@ public interface TasksRepository {
 
 	public List<Tasks> getTasksListByMEMBER_NUM(int MEMBER_NUM);
 
+	public List<Tasks> getTasksListByTASKS_STATUS(int TASKS_STATUS);
+
 	public List<Tasks> getTasksList();
 	
 	public Tasks getTasksByTASKS_NUM(int TASKS_NUM);

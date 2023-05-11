@@ -23,6 +23,10 @@ public class TasksService {
 	public List<Tasks> getTasksListByMEMBER_NUM(int MEMBER_NUM){
 		return tasksRepository.getTasksListByMEMBER_NUM(MEMBER_NUM);
 	}
+	
+	public List<Tasks> getTasksListByTASKS_STATUS(int TASKS_STATUS){
+		return tasksRepository.getTasksListByTASKS_STATUS(TASKS_STATUS);
+	}
 
 	
 	public Tasks getTasksByTASKS_NUM(int TASKS_NUM) {
