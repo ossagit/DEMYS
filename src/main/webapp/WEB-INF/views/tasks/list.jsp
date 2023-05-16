@@ -16,130 +16,195 @@
 .card-body {
 	padding: 1rem;
 }
+
+.mod_modal_bg {
+   display: none;
+   width: 100%;
+   height: 100%;
+   position: fixed; 
+   top: 0;
+   left: 0;
+   right: 0;
+   background: rgba(0, 0, 0, 0.6);
+   z-index: 1300; 
+
+}
+   
+.mod_modal_wrap {
+   display: none;
+   position: absolute; 
+   top: 50%;
+   left: 50%;
+   transform:translate(-50%,-50%);
+   z-index: 1301;
+   background-color:white;
+
+}
+
+.reg_modal_bg {
+   display: none;
+   width: 100%;
+   height: 100%;
+   position: fixed; 
+   top: 0;
+   left: 0;
+   right: 0;
+   background: rgba(0, 0, 0, 0.6);
+   z-index: 1300; 
+
+}
+   
+.reg_modal_wrap {
+   display: none;
+   position: absolute; 
+   top: 50%;
+   left: 50%;
+   transform:translate(-50%,-50%);
+   z-index: 1301;
+   background-color:white;
+
+}
+
 </style>
 <div style="width: 100%; height: 955px;">
 	<div class="flex items-center" style="width: 100%; height: 100%; background-color: #e7e7e7;">
 		<div class="flex justify-evenly" style="width: 100%; height: 90%;">
+
+
 			<div class="shadow-xl shadow-black rounded-lg" style="width: 30%; height: 98.5%; margin-top: 5px; background-color:white;">
 				<div class="title flex justify-around items-center" style="height: 10%;">
 					<div style="color:navy; font-size:1.5rem; font-weight:bolder;">&nbsp;&nbsp;TO DO </div>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-sm" style="background-color:navy; color:white; font-size:1rem;">十 추가</button>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-sm" onclick="javascript:regOpen(1);" data-toggle="modal" data-target="#modifyModal" style="background-color:navy; color:white; font-size:1rem;">十 추가</button>
 				</div>
-				<div class="content flex flex-col items-center" style="width:98%; height: 89%; margin-top:5px; margin-left: 10px; overflow: auto;">
-					<c:forEach var="todo" items="${todoList }">
-						<div class="card bg-base-100 shadow-2xl" style="display: flex; flex-direction: row; width: 90%; height: 120px; margin: 5px; background-color:#CFF4FF;">
-							<div class="card-body" style="width: 90%; height: 100%; margin: 0;">
-								<div class="card-title" style="margin: 0;">${todo.TASKS_CONTENT }</div>
-								<div class="card-content flex">
-									<div>종료일 :&nbsp;</div>
-									<div><fmt:formatDate value="${todo.TASKS_ENDDATE }" type="both" pattern="yyyy년 MM월 dd일 a hh시 mm분"/></div>
-								</div>
-							</div>
-							<div class="flex flex-col justify-evenly items-center" style="width: 10%; height: 100%;">
-							
-								<c:if test="${todo.TASKS_IMP=='1'}">
-									<div class="badge badge-md badge-error" ></div>
-								</c:if>
-								
-								<c:if test="${todo.TASKS_IMP=='2'}">
-									<div class="badge badge-md badge-warning" ></div>
-								</c:if>
-								
-								<c:if test="${todo.TASKS_IMP=='3'}">
-									<div class="badge badge-md badge-success" ></div>
-								</c:if>
-								<div class="dropdown dropdown-left dropdown-end">
-									<label tabindex="0" class="btn btn-ghost btn-sm m-1"><i class="fa-solid fa-arrow-right-arrow-left"></i></label>
-									<ul tabindex="0" class="dropdown-content menu shadow bg-base-100 w-52 h-20">
-										<li class="h-9" style="font-size:11px; font-weight:bolder;"><a href="javascript:moveINPROGRESS('${todo.TASKS_NUM }');">IN PROGRESS</a></li>
-										<li class="h-9" style="font-size:11px; font-weight:bolder;"><a>DONE</a></li>
-									</ul>
-								</div>
-								
-								<i class="fa-solid fa-ellipsis-vertical"></i>
-							</div>
-						</div>
-					</c:forEach>
+				<div id="todo-list" class="content flex flex-col items-center" style="width:98%; height: 89%; margin-top:5px; margin-left: 10px; overflow: auto;">
+					
+					
+					
+					
+					
 				</div>
 			</div>
 			
 			<div class="shadow-xl shadow-black rounded-lg" style="width: 30%; height: 98.5%; margin-top: 5px; background-color:white;">
 				<div class="title flex justify-around items-center" style="height: 10%;">
 					<div style="color:navy; font-size:1.5rem; font-weight:bolder;">&nbsp;&nbsp;IN PROGRESS </div>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-sm" style="background-color:navy; color:white; font-size:1rem;">十 추가</button>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-sm" onclick="javascript:regOpen(2);" style="background-color:navy; color:white; font-size:1rem;">十 추가</button>
 				</div>
-				<div class="content flex flex-col items-center" style="width:98%; height: 89%; margin-top:5px; margin-left: 10px; overflow: auto;">
-					<c:forEach var="inprogress" items="${inprogressList }">
-						<div class="card bg-base-100 shadow-2xl" style="display: flex; flex-direction: row; width: 90%; height: 120px; margin: 5px; background-color:#CFF4FF;">
-							<div class="card-body" style="width: 90%; height: 100%; margin: 0;">
-								<div class="card-title" style="margin: 0;">${inprogress.TASKS_CONTENT }</div>
-								<div class="card-content flex">
-									<div>종료일 :&nbsp;</div>
-									<div><fmt:formatDate value="${inprogress.TASKS_ENDDATE }" type="both" pattern="yyyy년 MM월 dd일 a hh시 mm분"/></div>
-								</div>
-							</div>
-							<div class="flex flex-col justify-evenly items-center" style="width: 10%; height: 100%;">
-								<c:if test="${inprogress.TASKS_IMP=='1'}">
-									<div class="badge badge-md badge-error" ></div>
-								</c:if>
-								
-								<c:if test="${inprogress.TASKS_IMP=='2'}">
-									<div class="badge badge-md badge-warning" ></div>
-								</c:if>
-								
-								<c:if test="${inprogress.TASKS_IMP=='3'}">
-									<div class="badge badge-md badge-success" ></div>
-								</c:if>
-								<i class="fa-solid fa-arrow-right-arrow-left"></i>
-								<i class="fa-solid fa-ellipsis-vertical"></i>
-							</div>
-						</div>
-					</c:forEach>
+				<div id="inprogress-list" class="content flex flex-col items-center" style="width:98%; height: 89%; margin-top:5px; margin-left: 10px; overflow: auto;">
+					
+
+
+
+
+
 				</div>
 			</div>
 			
 			<div class="shadow-xl shadow-black rounded-lg" style="width: 30%; height: 98.5%; margin-top: 5px; background-color:white;">
 				<div class="title flex justify-around items-center" style="height: 10%;">
 					<div style="color:navy; font-size:1.5rem; font-weight:bolder;">&nbsp;&nbsp;DONE </div>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-sm" style="background-color:navy; color:white; font-size:1rem;">十 추가</button>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button class="btn btn-sm" onclick="javascript:regOpen(3);" style="background-color:navy; color:white; font-size:1rem;">十 추가</button>
 				</div>
-				<div class="content flex flex-col items-center" style="width:98%; height: 89%; margin-top:5px; margin-left: 10px; overflow: auto;">
-					<c:forEach var="done" items="${doneList }">
-						<div class="card bg-base-100 shadow-2xl" style="display: flex; flex-direction: row; width: 90%; height: 120px; margin: 5px; background-color:#CFF4FF;">
-							<div class="card-body" style="width: 90%; height: 100%; margin: 0;">
-								<div class="card-title" style="margin: 0;">${done.TASKS_CONTENT }</div>
-								<div class="card-content flex">
-									<div>종료일 :&nbsp;</div>
-									<div><fmt:formatDate value="${done.TASKS_ENDDATE }" type="both" pattern="yyyy년 MM월 dd일 a hh시 mm분"/></div>
-								</div>
-							</div>
-							<div class="flex flex-col justify-evenly items-center" style="width: 10%; height: 100%;">
-								<c:if test="${done.TASKS_IMP=='1'}">
-									<div class="badge badge-md badge-error" ></div>
-								</c:if>
-								
-								<c:if test="${done.TASKS_IMP=='2'}">
-									<div class="badge badge-md badge-warning" ></div>
-								</c:if>
-								
-								<c:if test="${done.TASKS_IMP=='3'}">
-									<div class="badge badge-md badge-success" ></div>
-								</c:if>
-								<i class="fa-solid fa-arrow-right-arrow-left"></i>
-								<i class="fa-solid fa-ellipsis-vertical"></i>
-							</div>
-						</div>
-					</c:forEach>
+				<div id="done-list" class="content flex flex-col items-center" style="width:98%; height: 89%; margin-top:5px; margin-left: 10px; overflow: auto;">
+					
+
+
+
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
-<script>
-	function moveINPROGRESS(status){
-		
-	}
-</script>
+
+<div class="reg_modal_bg" onClick="javascript:regClose();"></div>
+<div class="reg_modal_wrap" style="width:800px; height:500px;">
+	<div class="modal-content">
+		<div class="modal-header flex" style="background-color: #153A66;">
+			<div class="navbar text-neutral-content modal-head">
+				<div class="text-white modal-head-0">&nbsp;&nbsp;&nbsp;&nbsp;DEMYS PMS</div>
+			</div>
+		</div>
+		<div class="modal-body m-10">
+			<div class="modal-title flex justify-center mb-3">
+				<span style="font-size:2rem;">개인업무 등록</span>
+			</div>
+			<input id="reg_tasks_STATUS" type="hidden" name="tasks_STATUS" />
+			<hr/>
+			<div class="mt-3 ml-3">내용</div>
+			<input id="reg_tasks_CONTENT" name="tasks_CONTENT" type="text" placeholder="내용을 입력하세요." class="input input-bordered input-lg mt-2 ml-3" style="width:700px;"/>
+			<div class="task-modal-serach mt-6 flex justify-center">
+				<select id="reg_tasks_IMP" class="tasks-modal-impsearch select select-bordered">
+					<option disabled selected>중요도 </option>
+					<option value=1 style="color:#F87272;">&#xf111; 긴급</option>
+					<option value=2 style="color:#FBBD23;">&#xf111; 중요</option>
+					<option value=3 style="color:#36D399;">&#xf111; 보통</option>
+				</select>
+				<div class="task-modal-datesearch ml-8 flex items-center" style="font-size:1.2rem;">
+					종료일 : &nbsp;
+					<input id="reg_tasks_ENDDATE_date" name="tasks_ENDDATE_date" type="date" style="border:solid 2px gray;" />&nbsp;&nbsp;
+					종료시간 :&nbsp;
+					<input id="reg_tasks_ENDDATE_time" name="tasks_ENDDATE_time" type="time" value="18:00" style="border:solid 2px gray;"/>					
+				</div>
+			</div>
+			<div class="task-modal-share flex justify-center">
+				캘린더에 표시 :&nbsp;<input id="reg_tasks_SHARE" name="tasks_SHARE" type="checkbox" class="checkbox checkbox-error" />
+			</div>
+		</div>
+		<div class="modal-footer flex justify-center">
+			<button type="button" class="btn btn-accent" data-dismiss="modal" onclick="javascript:reg_go();">확인</button>&nbsp;&nbsp;&nbsp;
+			<button type="button" class="close btn btn-error" data-dismiss="modal" aria-label="Close" onclick="javascript:regClose();">
+				<span aria-hidden="true">닫기</span>
+			</button>
+		</div>
+	</div>
+</div>
+
+<div class="mod_modal_bg" onClick="javascript:modClose();"></div>
+<div class="mod_modal_wrap" style="width:800px; height:500px;">
+	<div class="modal-content">
+		<div class="modal-header flex" style="background-color: #153A66;">
+			<div class="navbar text-neutral-content modal-head">
+				<div class="text-white modal-head-0">&nbsp;&nbsp;&nbsp;&nbsp;DEMYS PMS</div>
+			</div>
+		</div>
+		<div class="modal-body m-10">
+			<div class="modal-title flex justify-center mb-3">
+				<span style="font-size:2rem;">개인업무 수정</span>
+			</div>
+			<input type="hidden" name="tasks_NUM" />
+			<hr/>
+			<div class="mt-3 ml-3">내용</div>
+			<input name="tasks_CONTENT" type="text" placeholder="내용을 입력하세요." class="input input-bordered input-lg mt-2 ml-3" style="width:700px;"/>
+			<div class="task-modal-serach mt-6 flex justify-center">
+				<select class="tasks-modal-impsearch select select-bordered">
+					<option disabled selected>중요도 </option>
+					<option value=1 style="color:#F87272;">&#xf111; 긴급</option>
+					<option value=2 style="color:#FBBD23;">&#xf111; 중요</option>
+					<option value=3 style="color:#36D399;">&#xf111; 보통</option>
+				</select>
+				<div class="task-modal-datesearch ml-8 flex items-center" style="font-size:1.2rem;">
+					종료일 : &nbsp;
+					<input name="tasks_ENDDATE_date" type="date" style="border:solid 2px gray;" />&nbsp;&nbsp;
+					종료시간 :&nbsp;
+					<input name="tasks_ENDDATE_time" type="time" style="border:solid 2px gray;"/>					
+				</div>
+			</div>
+			<div class="task-modal-share flex justify-center">
+				캘린더에 표시 :&nbsp;<input name="tasks_SHARE" type="checkbox" class="checkbox checkbox-error" />
+			</div>
+		</div>
+		<div class="modal-footer flex justify-center">
+			<button type="button" class="btn btn-accent" data-dismiss="modal">확인</button>&nbsp;&nbsp;&nbsp;
+			<button type="button" class="close btn btn-error" data-dismiss="modal" aria-label="Close" onClick="javascript:modClose();">
+				<span aria-hidden="true">닫기</span>
+			</button>
+		</div>
+	</div>
+</div>
+
+<%@ include file="taskscard.jsp"%>
+
+
 
 <%@ include file="../common/foot.jsp"%>

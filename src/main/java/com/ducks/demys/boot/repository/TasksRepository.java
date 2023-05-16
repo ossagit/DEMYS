@@ -1,5 +1,6 @@
 package com.ducks.demys.boot.repository;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -18,10 +19,14 @@ public interface TasksRepository {
 	public Tasks getTasksByTASKS_NUM(int TASKS_NUM);
 	
 	public int selectTasksSequenceNextValue();
+
+	public Date changeDate(String STRING_ENDDATE);
 	
 	public void registTasks(Tasks tasks);
 	
 	public void modifyTasks(Tasks tasks);
+	
+	public void modifyTasksStatus(int TASKS_NUM, int TASKS_STATUS);
 	
 	public void removeTasks(int TASKS_NUM);
 	
