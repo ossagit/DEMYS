@@ -4,15 +4,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>    
 <script type="text/x-handlebars-template"  id="taskcard-template" >
 {{#each .}}
-	<div class="{{area tasks_STATUS }} card bg-base-100 shadow-2xl" style="display: flex; flex-direction: row; width: 90%; height: 120px; margin: 5px; background-color:#CFF4FF;">
+	<div id="{{tasks_NUM}}-TC" class="{{area tasks_STATUS }} card bg-base-100 shadow-2xl" style="display: flex; flex-direction: row; width: 90%; height: 120px; margin: 5px; background-color:#CFF4FF;">
 		<div class="card-body" style="width: 90%; height: 100%; margin: 0;">
-			<div id="{{tasks_NUM}}-TC" class="card-title" style="margin: 0;">{{tasks_CONTENT }}</div>
+			<div class="card-title" style="margin: 0;">{{tasks_CONTENT }}</div>
 			<div class="card-content flex">
 				<div>종료일 : </div>
-				<div>{{prettifyDate tasks_ENDDATE }}</div>
+				<div class="tasks_ENDDATE">{{prettifyDate tasks_ENDDATE }}</div>
 			</div>
 		</div>
-		<div class="flex flex-col justify-evenly items-center" style="width: 10%; height: 100%;">
+		<div class="sideWindow flex flex-col justify-evenly items-center" style="width: 10%; height: 100%;">
 				<div class="badge badge-md badge-{{color tasks_IMP }}" ></div>
 			<div class="dropdown dropdown-left dropdown-end">
 				<label tabindex="0" class="btn btn-ghost btn-sm m-1"><i class="fa-solid fa-arrow-right-arrow-left"></i></label>
@@ -22,12 +22,12 @@
 					<li class="h-9 {{doneHidden tasks_STATUS }}" style="font-size:11px; font-weight:bolder;"><a href="javascript:moveCard({{tasks_NUM }} , 3);">DONE</a></li>
 				</ul>
 			</div>
-			<div class="dropdown dropdown-left dropdown-end">
+			<div class="sharefather dropdown dropdown-left dropdown-end">
 				<label tabindex="0" class="btn btn-ghost btn-sm m-1"><i class="fa-solid fa-ellipsis-vertical"></i></label>
 				<ul tabindex="0" class="dropdown-content menu shadow bg-base-100 w-20 h-50">
 					<li class="h-9" style="font-size:11px; font-weight:bolder;"><a href="javascript:modOpen({{tasks_NUM }});">수정</a></li>
 					<li class="h-9" style="font-size:11px; font-weight:bolder;"><a href="javascript:removeCard({{tasks_NUM }});">삭제</a></li>
-					<li class="h-9{{shareHidden tasks_SHARE }}" style="font-size:11px; font-weight:bolder;"><a href="javascript:cardShare({{tasks_NUM }});">공유</a></li>
+					<li class="h-9 {{shareHidden tasks_SHARE }}" style="font-size:11px; font-weight:bolder;"><a href="javascript:cardShare({{tasks_NUM }});">공유</a></li>
 				</ul>
 			</div>
 		</div>
@@ -200,34 +200,34 @@ function modClose() {
 }
 function reg_go(){
 	var tasks_CONTENT=$('#reg_tasks_CONTENT').val();
-	var tasks_IMP=$('#reg_tasks_IMP').val();
+	var tasks_IMP=parseInt($('#reg_tasks_IMP').val());
 	var tasks_ENDDATE=$('#reg_tasks_ENDDATE_date').val()+" "+$('#reg_tasks_ENDDATE_time').val()+":00";
 	var tasks_SHARE=$('#reg_tasks_SHARE').val();
-	var tasks_STATUS=$('#reg_tasks_STATUS').val();
-	var member_NUM='3';
+	var tasks_STATUS=parseInt($('#reg_tasks_STATUS').val());
+	var member_NUM=3;
 	
 	if(tasks_SHARE=="on"){
-		tasks_SHARE='1';
+		tasks_SHARE=1;
 	}else{
-		tasks_SHARE='0';
+		tasks_SHARE=0;
 	}
-	var data={
-			"TASKS_CONTENT":tasks_CONTENT,
-			"TASKS_IMP":tasks_IMP,
-			"STRING_ENDDATE":tasks_ENDDATE,
-			"TASKS_SHARE":tasks_SHARE,
-			"TASKS_STATUS":tasks_STATUS,
-			"MEMBER_NUM":member_NUM
+	var task={
+			"tasks_CONTENT":tasks_CONTENT,
+			"tasks_IMP":tasks_IMP,
+			"string_ENDDATE":tasks_ENDDATE,
+			"tasks_SHARE":tasks_SHARE,
+			"tasks_STATUS":tasks_STATUS,
+			"member_NUM":member_NUM
 	}
 	$.ajax({
 		url:"<%=request.getContextPath()%>/tasks/regist",
 		type:"post",
-		data:JSON.stringify(data),
-		contentType:'application/json',
-		success:function(data){
+		data:JSON.stringify(task),
+		contentType:"application/json",
+		success:function(){
 			alert('일정이 등록되었습니다.');
-			$('#tasks_CONTENT').val("");
-			$('#tasks_IMP').val("");
+			$('#reg_tasks_CONTENT').val("");
+			$('#reg_tasks_IMP').val("");
 			$('#reg_tasks_ENDDATE_date').val("");
 			$('#reg_tasks_ENDDATE_time').val("");
 			$('#reg_tasks_SHARE').val("");
@@ -240,6 +240,30 @@ function reg_go(){
 			$(modalBg).hide();
 			
 			showTaskList();
+		},
+		error:function(error){
+			alert("실패했습니다.");
+		}
+	});
+}
+
+function modOpen(TASKS_NUM){
+	
+	var data={
+			"tasks_NUM"=TASKS_NUM;
+	}
+	$.ajax({
+		url:"<%=request.getContextPath()%>/tasks/getTask",
+		type:"post",
+		data:JSON.stringify(data),
+		contentType:"application/json",
+		success:function(sendData){
+			$('#mod_tasks_CONTENT').val(sendData.tasks_CONTENT);
+			$('#mod_tasks_IMP').val(sendData.tasks_IMP);
+			$('#mod_tasks_ENDDATE_date').val(sendData.tasks_CONTENT);
+			$('#mod_tasks_ENDDATE_time').val(sendData.tasks_CONTENT);
+			$('#mod_tasks_SHARE').val(sendData.tasks_SHARE);
+			$('#mod_tasks_STATUS').val(sendData.tasks_STATUS);
 		},
 		error:function(error){
 			alert("실패했습니다.");

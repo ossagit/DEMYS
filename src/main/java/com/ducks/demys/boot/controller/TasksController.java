@@ -69,7 +69,14 @@ public class TasksController {
 	
 	@RequestMapping("/tasks/regist")
 	@ResponseBody
-	public void registTask(@RequestBody Tasks task) {
-		tasksService.registTasks(task);
+	public void registTask(@RequestBody Tasks tasks) {
+		tasksService.registTasks(tasks);
+	}
+	
+	@RequestMapping("/tasks/getTask")
+	@ResponseBody
+	public Tasks returnTask(@RequestBody Tasks tasks) {
+		Tasks task = tasksService.getTasksByTASKS_NUM(tasks.getTASKS_NUM());
+		return task;
 	}
 }
