@@ -24,7 +24,7 @@ public class MainController {
 	public void showMain(){
 	}
 	
-	@RequestMapping("/mainIssue")
+	@RequestMapping("/mainIssue2")
 	public void showMainIssue(){
 	}
 	

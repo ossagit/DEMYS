@@ -25,7 +25,7 @@
 			<div class="sharefather dropdown dropdown-left dropdown-end">
 				<label tabindex="0" class="btn btn-ghost btn-sm m-1"><i class="fa-solid fa-ellipsis-vertical"></i></label>
 				<ul tabindex="0" class="dropdown-content menu shadow bg-base-100 w-20 h-50">
-					<li class="h-9" style="font-size:11px; font-weight:bolder;"><a href="javascript:modOpen({{tasks_NUM }});">수정</a></li>
+					<li class="h-9" style="font-size:11px; font-weight:bolder;"><a href="javascript:modOpen({{tasks_NUM }} );">수정</a></li>
 					<li class="h-9" style="font-size:11px; font-weight:bolder;"><a href="javascript:removeCard({{tasks_NUM }});">삭제</a></li>
 					<li class="h-9 {{shareHidden tasks_SHARE }}" style="font-size:11px; font-weight:bolder;"><a href="javascript:cardShare({{tasks_NUM }});">공유</a></li>
 				</ul>
@@ -110,13 +110,13 @@ function printData(taskArr,target,templateObject){
 	var html = template(taskArr);
 	var nullHtml = '';
 	
-	if(taskArr[0].tasks_STATUS==1){		
+	if(taskArr[0] == null || taskArr[0].tasks_STATUS==1){		
 		$('.todocard').remove();
 	}
-	else if(taskArr[0].tasks_STATUS==2){		
+	else if(taskArr[0] == null || taskArr[0].tasks_STATUS==2){		
 		$('.inprogresscard').remove();
 	}
-	else if(taskArr[0].tasks_STATUS==3){		
+	else if(taskArr[0] == null || taskArr[0].tasks_STATUS==3){		
 		$('.donecard').remove();
 	}
 	target.append(nullHtml);
@@ -172,14 +172,6 @@ function regOpen(TASK_STATUS) {
 
 }
 
-function modOpen(tasks_NUM) {
-    var modalPop = $('.mod_modal_wrap');
-    var modalBg = $('.mod_modal_bg');
-
-    $(modalPop).show();
-    $(modalBg).show();
-
-}
 
 function regClose() {
    var modalPop = $('.reg_modal_wrap');
@@ -247,25 +239,94 @@ function reg_go(){
 	});
 }
 
-function modOpen(TASKS_NUM){
-	
-	var data={
-			"tasks_NUM"=TASKS_NUM;
+function modOpen(TASKS_NUM) {
+    var data = {
+        "tasks_NUM": TASKS_NUM
+    };
+    
+    $.ajax({
+        url: "/tasks/getTask",
+        type: "post",
+        data: JSON.stringify(data),
+        contentType: "application/json",
+        success: function (sendData) {
+            $('#mod_tasks_NUM').val(sendData.tasks_NUM);
+            $('#mod_tasks_CONTENT').val(sendData.tasks_CONTENT);
+            $('#mod_tasks_IMP').val(sendData.tasks_IMP);
+            var result1 = sendData.string_ENDDATE.substr(0, 10);
+            var result2 = sendData.string_ENDDATE.substr(11);
+            $('#mod_tasks_ENDDATE_date').val(result1);
+            $('#mod_tasks_ENDDATE_time').val(result2);
+            if(sendData.tasks_SHARE==1){
+            	$('#mod_tasks_SHARE').val("on");
+            }
+            else{
+            	$('#mod_tasks_SHARE').val("off");
+            }
+            $('#mod_tasks_STATUS').val(sendData.tasks_STATUS);
+            
+            var modalPop = $('.mod_modal_wrap');
+            var modalBg = $('.mod_modal_bg');
+            
+            $(modalPop).show();
+            $(modalBg).show();
+        },
+        error: function (error) {
+            alert("실패했습니다.");
+        }
+    });
+}
+
+function mod_go() {
+	var tasks_NUM = $('#mod_tasks_NUM').val();
+	var tasks_CONTENT = $('#mod_tasks_CONTENT').val();
+	var tasks_IMP = parseInt($('#mod_tasks_IMP').val());
+	var tasks_ENDDATE = $('#mod_tasks_ENDDATE_date').val() + " " + $('#mod_tasks_ENDDATE_time').val();
+	var tasks_SHARE = $('#mod_tasks_SHARE').val();
+	var tasks_STATUS = parseInt($('#mod_tasks_STATUS').val());
+	var member_NUM = 3;
+
+	if (tasks_SHARE == "on") {
+		tasks_SHARE = 1;
+	} else {
+		tasks_SHARE = 0;
 	}
+
+	var data = {
+		"tasks_NUM": parseInt(tasks_NUM),
+		"tasks_CONTENT": tasks_CONTENT,
+		"tasks_IMP": tasks_IMP,
+		"string_ENDDATE": tasks_ENDDATE,
+		"tasks_SHARE": tasks_SHARE,
+		"tasks_STATUS": tasks_STATUS,
+		"member_NUM": member_NUM
+	};
+
 	$.ajax({
-		url:"<%=request.getContextPath()%>/tasks/getTask",
-		type:"post",
-		data:JSON.stringify(data),
-		contentType:"application/json",
-		success:function(sendData){
-			$('#mod_tasks_CONTENT').val(sendData.tasks_CONTENT);
-			$('#mod_tasks_IMP').val(sendData.tasks_IMP);
-			$('#mod_tasks_ENDDATE_date').val(sendData.tasks_CONTENT);
-			$('#mod_tasks_ENDDATE_time').val(sendData.tasks_CONTENT);
-			$('#mod_tasks_SHARE').val(sendData.tasks_SHARE);
-			$('#mod_tasks_STATUS').val(sendData.tasks_STATUS);
+		url: "/tasks/modify",
+		type: "post",
+		data: JSON.stringify(data),
+		contentType: "application/json",
+		success: function () {
+			alert('일정이 수정되었습니다.');
+			$('#mod_tasks_NUM').val("");
+			$('#mod_tasks_CONTENT').val("");
+			$('#mod_tasks_IMP').val("");
+			$('#mod_tasks_ENDDATE_date').val("");
+			$('#mod_tasks_ENDDATE_time').val("");
+			$('#mod_tasks_SHARE').val("");
+			$('#mod_tasks_STATUS').val("");
+
+			var modalPop = $('.mod_modal_wrap');
+			var modalBg = $('.mod_modal_bg');
+
+			$(modalPop).hide();
+			$(modalBg).hide();
+
+			// showTaskList() 함수가 정의되어 있다면 호출
+			showTaskList();
 		},
-		error:function(error){
+		error: function (error) {
 			alert("실패했습니다.");
 		}
 	});

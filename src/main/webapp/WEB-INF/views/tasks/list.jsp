@@ -172,12 +172,13 @@
 			<div class="modal-title flex justify-center mb-3">
 				<span style="font-size:2rem;">개인업무 수정</span>
 			</div>
-			<input type="hidden" name="tasks_NUM" />
+			<input id="mod_tasks_NUM" type="hidden" name="tasks_NUM" />
+			<input id="mod_tasks_STATUS" type="hidden" name="tasks_STATUS" />
 			<hr/>
 			<div class="mt-3 ml-3">내용</div>
-			<input name="tasks_CONTENT" type="text" placeholder="내용을 입력하세요." class="input input-bordered input-lg mt-2 ml-3" style="width:700px;"/>
+			<input id="mod_tasks_CONTENT" name="tasks_CONTENT" type="text" placeholder="내용을 입력하세요." class="input input-bordered input-lg mt-2 ml-3" style="width:700px;"/>
 			<div class="task-modal-serach mt-6 flex justify-center">
-				<select class="tasks-modal-impsearch select select-bordered">
+				<select id="mod_tasks_IMP" class="tasks-modal-impsearch select select-bordered">
 					<option disabled selected>중요도 </option>
 					<option value=1 style="color:#F87272;">&#xf111; 긴급</option>
 					<option value=2 style="color:#FBBD23;">&#xf111; 중요</option>
@@ -185,17 +186,17 @@
 				</select>
 				<div class="task-modal-datesearch ml-8 flex items-center" style="font-size:1.2rem;">
 					종료일 : &nbsp;
-					<input name="tasks_ENDDATE_date" type="date" style="border:solid 2px gray;" />&nbsp;&nbsp;
+					<input id="mod_tasks_ENDDATE_date" name="tasks_ENDDATE_date" type="date" style="border:solid 2px gray;" />&nbsp;&nbsp;
 					종료시간 :&nbsp;
-					<input name="tasks_ENDDATE_time" type="time" style="border:solid 2px gray;"/>					
+					<input id="mod_tasks_ENDDATE_time" name="tasks_ENDDATE_time" type="time" style="border:solid 2px gray;"/>					
 				</div>
 			</div>
 			<div class="task-modal-share flex justify-center">
-				캘린더에 표시 :&nbsp;<input name="tasks_SHARE" type="checkbox" class="checkbox checkbox-error" />
+				캘린더에 표시 :&nbsp;<input id="mod_tasks_SHARE" name="tasks_SHARE" type="checkbox" class="checkbox checkbox-error" />
 			</div>
 		</div>
 		<div class="modal-footer flex justify-center">
-			<button type="button" class="btn btn-accent" data-dismiss="modal">확인</button>&nbsp;&nbsp;&nbsp;
+			<button type="button" class="btn btn-accent" data-dismiss="modal" onclick="javascript:mod_go();">확인</button>&nbsp;&nbsp;&nbsp;
 			<button type="button" class="close btn btn-error" data-dismiss="modal" aria-label="Close" onClick="javascript:modClose();">
 				<span aria-hidden="true">닫기</span>
 			</button>
@@ -204,7 +205,5 @@
 </div>
 
 <%@ include file="taskscard.jsp"%>
-
-
 
 <%@ include file="../common/foot.jsp"%>

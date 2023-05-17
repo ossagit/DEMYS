@@ -1,12 +1,13 @@
 package com.ducks.demys.boot.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -77,6 +78,15 @@ public class TasksController {
 	@ResponseBody
 	public Tasks returnTask(@RequestBody Tasks tasks) {
 		Tasks task = tasksService.getTasksByTASKS_NUM(tasks.getTASKS_NUM());
+		SimpleDateFormat dspformatter = new  SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Date endDate = task.getTASKS_ENDDATE();
+		String stringEndDate = dspformatter.format(endDate);
+		task.setSTRING_ENDDATE(stringEndDate);
 		return task;
+	}
+	@RequestMapping("/tasks/modify")
+	@ResponseBody
+	public void modifyTask(@RequestBody Tasks tasks) {
+		tasksService.modifyTasks(tasks);
 	}
 }
