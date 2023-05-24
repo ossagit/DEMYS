@@ -3,11 +3,35 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.ducks.demys.boot.repository.IssueRepository">
-	<select id="getIssueList" resultType="issue">
-		SELECT *
+	<sql id="search">
+		<if test="ISSUE_IMP != null and ISSUE_IMP != 0">
+			WHERE ISSUE.ISSUE_IMP LIKE '%'||#{ISSUE_IMP}||'%' 
+		</if>
+		<if test="MEMBER_NUM != null and MEMBER_NUM != 0">
+			AND PROJECTS.MEMBER_NUM = #{MEMBER_NUM}
+		</if>
+	</sql>
+	<sql id="orderby">
+		<if test="SORT =='end'.toString()">
+			ORDER BY PROJECTS.PJ_ENDDATE ASC
+		</if>
+		<if test="SORT =='reg'.toString()">
+			ORDER BY PROJECTS.PJ_REGDATE DESC
+		</if>
+	</sql>
+	<select id="getIssueListForTLDashboard" resultType="issue">
+		SELECT ISSUE.*, MEMBER.MEMBER_NAME, PROJECTS.PJ_NAME, CONTACTS.CT_NAME, COALESCE(COUNT(ISSUEREPLY.ISSUE_NUM), 0) AS ISSUEREPLY_COUNT
 		FROM ISSUE
-		ORDER BY ISSUE_NUM DESC
+		JOIN MEMBER ON ISSUE.MEMBER_NUM = MEMBER.MEMBER_NUM
+		LEFT JOIN PROJECTS ON ISSUE.PJ_NUM = PROJECTS.PJ_NUM
+		JOIN CONTACTS ON PROJECTS.CT_NUM = CONTACTS.CT_NUM
+		LEFT JOIN ISSUEREPLY ON ISSUE.ISSUE_NUM = ISSUEREPLY.ISSUE_NUM
+		<include refid="search" />
+		GROUP BY ISSUE.ISSUE_NUM, ISSUE.ISSUE_TITLE, ISSUE.ISSUE_CONTENT, ISSUE.ISSUE_IMP, ISSUE.ISSUE_STATUS, ISSUE.ISSUE_REGDATE, ISSUE.ISSUE_UPDATEDATE, ISSUE.ISSUE_DEADLINE, ISSUE.ISSUE_ENDDATE, ISSUE.MEMBER_NUM, ISSUE.PJ_NUM, MEMBER.MEMBER_NAME, PROJECTS.PJ_NAME, CONTACTS.CT_NAME
+		<include refid="orderby" />
+		
 	</select>
+
 	<select id="getIssueListByPJ_NUM" resultType="Issue">
 		SELECT *
 		FROM ISSUE

@@ -48,6 +48,12 @@
 		TASKS_STATUS=#{TASKS_STATUS}
 		WHERE TASKS_NUM=#{TASKS_NUM}
 	</update>
+	<update id="modifyTasksShare">
+		UPDATE TASKS
+		SET
+		TASKS_SHARE=#{TASKS_SHARE}
+		WHERE TASKS_NUM=#{TASKS_NUM}
+	</update>
 	<delete id="removeTasks">
 		DELETE
 		FROM TASKS

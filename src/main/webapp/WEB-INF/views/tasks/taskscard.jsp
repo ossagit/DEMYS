@@ -4,7 +4,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.7.7/handlebars.min.js"></script>    
 <script type="text/x-handlebars-template"  id="taskcard-template" >
 {{#each .}}
-	<div id="{{tasks_NUM}}-TC" class="{{area tasks_STATUS }} card bg-base-100 shadow-2xl" style="display: flex; flex-direction: row; width: 90%; height: 120px; margin: 5px; background-color:#CFF4FF;">
+	<div id="{{tasks_NUM}}-TC" class="{{area tasks_STATUS }} {{cardborder tasks_ENDDATE }} card bg-base-100 shadow-2xl" style="display: flex; flex-direction: row; width: 90%; height: 120px; margin: 5px; background-color:#CFF4FF;">
 		<div class="card-body" style="width: 90%; height: 100%; margin: 0;">
 			<div class="card-title" style="margin: 0;">{{tasks_CONTENT }}</div>
 			<div class="card-content flex">
@@ -92,10 +92,20 @@ Handlebars.registerHelper({
 	
 	"shareHidden":function(TASKS_SHARE){
 		if(TASKS_SHARE==1)
-			return "";
-		else
 			return "hidden";
+		else
+			return "";
 		
+	},
+	
+	"cardborder":function(TASKS_ENDDATE){
+		var today = new Date().getTime();
+		var endDate = new Date(TASKS_ENDDATE).getTime();
+		if(today>=endDate){
+			return "border-4 border-solid border-red-500";
+		}else{
+			return "";
+		}
 	}
 });
 
@@ -258,10 +268,10 @@ function modOpen(TASKS_NUM) {
             $('#mod_tasks_ENDDATE_date').val(result1);
             $('#mod_tasks_ENDDATE_time').val(result2);
             if(sendData.tasks_SHARE==1){
-            	$('#mod_tasks_SHARE').val("on");
+            	$('#mod_tasks_SHARE').prop('checked',true);
             }
             else{
-            	$('#mod_tasks_SHARE').val("off");
+            	$('#mod_tasks_SHARE').prop('checked',false);
             }
             $('#mod_tasks_STATUS').val(sendData.tasks_STATUS);
             
@@ -282,15 +292,9 @@ function mod_go() {
 	var tasks_CONTENT = $('#mod_tasks_CONTENT').val();
 	var tasks_IMP = parseInt($('#mod_tasks_IMP').val());
 	var tasks_ENDDATE = $('#mod_tasks_ENDDATE_date').val() + " " + $('#mod_tasks_ENDDATE_time').val();
-	var tasks_SHARE = $('#mod_tasks_SHARE').val();
+	var tasks_SHARE = $('#mod_tasks_SHARE').is(":checked") ? 1 : 0;
 	var tasks_STATUS = parseInt($('#mod_tasks_STATUS').val());
 	var member_NUM = 3;
-
-	if (tasks_SHARE == "on") {
-		tasks_SHARE = 1;
-	} else {
-		tasks_SHARE = 0;
-	}
 
 	var data = {
 		"tasks_NUM": parseInt(tasks_NUM),
@@ -323,13 +327,64 @@ function mod_go() {
 			$(modalPop).hide();
 			$(modalBg).hide();
 
-			// showTaskList() 함수가 정의되어 있다면 호출
 			showTaskList();
 		},
 		error: function (error) {
 			alert("실패했습니다.");
 		}
 	});
+}
+
+function removeCard(TASKS_NUM){
+
+	if (!confirm("해당 일정을 정말 삭제하시겠습니까?")) {
+		alert("취소되었습니다.");
+	} else {
+		var data = {
+		        "tasks_NUM": TASKS_NUM
+		    };
+		    
+		    $.ajax({
+		        url: "/tasks/removeCard",
+		        type: "post",
+		        data: JSON.stringify(data),
+		        contentType: "application/json",
+		        success: function (TASKS_NUM) {
+		        	$('#'+TASKS_NUM+'-TC').remove();
+		        	showTaskList();
+		        	alert("삭제되었습니다.");
+		        },
+		        error: function (error) {
+		            alert("실패했습니다.");
+		        }
+		    });
+	}
+}
+
+function cardShare(TASKS_NUM){
+	if (!confirm("해당 일정을 캘린더에 공유하시겠습니까?")) {
+		alert("취소되었습니다.");
+	} else {
+		var data = {
+		        "tasks_NUM": TASKS_NUM,
+		        "tasks_SHARE": 1
+		    };
+		    
+		    $.ajax({
+		        url: "/tasks/shareCard",
+		        type: "post",
+		        data: JSON.stringify(data),
+		        contentType: "application/json",
+		        success: function () {
+		        	
+		        	showTaskList();
+		        	alert("공유되었습니다.");
+		        },
+		        error: function (error) {
+		            alert("실패했습니다.");
+		        }
+		    });
+	}
 }
 
 </script>

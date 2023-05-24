@@ -19,6 +19,10 @@ public class IssueService {
 	public List<Issue> getIssueList(){
 		return issueRepository.getIssueList();
 	}
+
+	public List<Issue> getIssueListForDashboard(){
+		return issueRepository.getIssueListForDashboard();
+	}
 	
 	public List<Issue> getIssueListByMEMBER_NUM(int MEMBER_NUM){
 		return issueRepository.getIssueListByMEMBER_NUM(MEMBER_NUM);

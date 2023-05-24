@@ -11,6 +11,8 @@ public interface IssueRepository {
 
 	public List<Issue> getIssueList();
 
+	public List<Issue> getIssueListForDashboard();
+
 	public List<Issue> getIssueListByPJ_NUM(int PJ_NUM);
 	
 	public List<Issue> getIssueListByMEMBER_NUM(int MEMBER_NUM);

@@ -40,9 +40,7 @@ public class TasksService {
 	}
 	
 	public void modifyTasks(Tasks tasks) {
-		System.out.println("데이터들어옴3");
 		tasksRepository.modifyTasks(tasks);
-		System.out.println("데이터들어옴4");
 	}
 	
 	public void modifyTasksStatus(int TASKS_NUM, int TASKS_STATUS) {
@@ -51,5 +49,9 @@ public class TasksService {
 	
 	public void removeTasks(int TASKS_NUM) {
 		tasksRepository.removeTasks(TASKS_NUM);
+	}
+
+	public void modifyTasksShare(int TASKS_NUM, int TASKS_SHARE) {
+		tasksRepository.modifyTasksShare(TASKS_NUM, TASKS_SHARE);
 	}
 }

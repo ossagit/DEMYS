@@ -1,6 +1,7 @@
 package com.ducks.demys.boot.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,9 @@ public class UnitworkService {
 	}
 	
 	public List<Unitwork> getUnitworkListByPJ_NUM(int PJ_NUM){
-		return unitworkRepository.getUnitworkListByPJ_NUM(PJ_NUM);
+		List<Unitwork> unitworkData = unitworkRepository.getUnitworkListByPJ_NUM(1);
+		
+		return unitworkData;
 	}
 	
 	public List<Unitwork> getUnitworkListByMEMBER_NUM(int MEMBER_NUM){

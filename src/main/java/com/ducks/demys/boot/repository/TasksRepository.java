@@ -26,5 +26,7 @@ public interface TasksRepository {
 	public void modifyTasksStatus(int TASKS_NUM, int TASKS_STATUS);
 	
 	public void removeTasks(int TASKS_NUM);
+
+	public void modifyTasksShare(int TASKS_NUM, int TASKS_SHARE);
 	
 }

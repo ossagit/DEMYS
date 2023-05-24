@@ -50,7 +50,6 @@ public class TasksController {
 				doneList.add(task);
 			}
 		}
-		
 		Map<String,Object> dataMap=new HashMap<String,Object>();
 		
 		dataMap.put("todoList", todoList);
@@ -88,5 +87,21 @@ public class TasksController {
 	@ResponseBody
 	public void modifyTask(@RequestBody Tasks tasks) {
 		tasksService.modifyTasks(tasks);
+	}
+	
+	@RequestMapping("/tasks/removeCard")
+	@ResponseBody
+	public int removeCard(@RequestBody Tasks tasks) {
+		int TASKS_NUM=tasks.getTASKS_NUM();
+		tasksService.removeTasks(TASKS_NUM);
+		return TASKS_NUM;
+	}
+	
+	@RequestMapping("/tasks/shareCard")
+	@ResponseBody
+	public void shareCard(@RequestBody Tasks tasks) {
+		int T_N=tasks.getTASKS_NUM();
+		int T_S=tasks.getTASKS_SHARE();
+		tasksService.modifyTasksShare(T_N,T_S);
 	}
 }
